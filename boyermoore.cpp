@@ -1,7 +1,11 @@
 #include <iostream>
 #include <string>
 #include <vector>
-
+#include <cstdint>
+#include <cstring>
+#include <ctime>
+#include <iomanip>
+#include <fstream>
 
 # define Alpha 256
 
@@ -103,18 +107,95 @@ bool searchGS(std::string& pat, std::string& text) {
 	return false;
 }
 
+// Return the execution time of the selected algorithm
+float timer(uint16_t n, std::string name, std::string* pat, std::string* txt) {
+    bool found;
+    unsigned long c_start, c_end;
 
-int main()
-{
-	std::string txt = "ABAABABCABAB";
-	std::string pat = "CABAB";
-	//Best = O(1)
-	//Worst = O(mn)
-	//Average = O(m/n)
-	std::cout << searchBC(pat, txt);
-	//Best = O(1)
-	//Worst = O(mn)
-	//Average = O(m/n)
-	std::cout << searchGS(pat, txt);
+    // Placing the data in a (should probably be a single string
+    // for our purposes)
+    //
+    //std::vector<int> a;
+    //for (int i = 0; i < n; i++) {
+    //    a.push_back(i);
+    //}
 
+    // Executing the algorithm (can be done in various ways, so that's why
+    // I left this code untouched for now
+    if (name.compare("bc")) {
+        c_start = std::clock();
+        found = searchBC(*pat, *txt);
+        c_end = std::clock();
+    }
+    else if (name.compare("gs")) {
+        c_start = std::clock();
+        found = searchGS(*pat, *txt);
+        c_end = std::clock();
+    }
+    else {
+        std::cout << "Invalid function call" << std::endl;
+	return 0.0;
+    }
+
+    std::cout << "Search successful?: " << found << std::endl;
+
+    float output = 1.0 * (c_end - c_start) / CLOCKS_PER_SEC;
+    return output;
+}
+
+//int main()
+//{
+//	std::string txt = "ABAABABCABAB";
+//	std::string pat = "CABAB";
+//	//Best = O(1)
+//	//Worst = O(mn)
+//	//Average = O(m/n)
+//	std::cout << searchBC(pat, txt);
+//	//Best = O(1)
+//	//Worst = O(mn)
+//	//Average = O(m/n)
+//	std::cout << searchGS(pat, txt);
+//
+//}
+
+int main(int argc, char* argv[]) {
+    if (argc != 4) {
+	std::cout << "Invalid number of arguments" << std::endl;
+        return 0;
+    }
+
+    // Declare and initialize variables
+    std::string method = argv[1];
+    std::string pat = argv[2];
+    std::string filename = argv[3];
+    std::string txt;
+    std::ifstream file(filename);
+    std::stringstream buffer;
+    // Used to iterate from 0 to Max_Number in order to provide that number as
+    // input to the chosen function. This could possibly be used to provide 
+    // the max character number in the input string, and we can see what 
+    // happens when the substring is located at the beginning, middle, end, 
+    // and nowhere in the text, and we can use this loop to iterate in larger
+    // increments in order to accomplish this.
+    uint16_t max_char = (uint16_t) 99;//atoi(argv[1]);
+    
+    // Get the text from the text file and hold it in a single string
+    buffer << file.rdbuf();
+    txt = buffer.str();
+    file.close();
+
+    // Open the output file
+    std::ofstream myfile;
+    myfile.open(std::to_string(max_char)+ "_" + pat+".csv");
+
+    // Execute the selected method and write the time data to the output file
+    myfile << "input" << "," << "time" << '\n';
+    for (int i = 0; i <= max_char; i += 100) {
+	std::cout << "Searching with method " << method << "..." << std::endl;
+        float time = timer(i, method, &pat, &txt);
+        myfile << i << "," << std::fixed << std::setprecision(4) << time <<'\n';
+    }
+    myfile.close();
+
+    return 0;
 }
