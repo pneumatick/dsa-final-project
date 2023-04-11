@@ -112,16 +112,7 @@ float timer(uint16_t n, std::string name, std::string* pat, std::string* txt) {
     bool found;
     unsigned long c_start, c_end;
 
-    // Placing the data in a (should probably be a single string
-    // for our purposes)
-    //
-    //std::vector<int> a;
-    //for (int i = 0; i < n; i++) {
-    //    a.push_back(i);
-    //}
-
-    // Executing the algorithm (can be done in various ways, so that's why
-    // I left this code untouched for now
+    // Executing the algorithm 
     if (name.compare("bc")) {
         c_start = std::clock();
         found = searchBC(*pat, *txt);
@@ -143,21 +134,6 @@ float timer(uint16_t n, std::string name, std::string* pat, std::string* txt) {
     return output;
 }
 
-//int main()
-//{
-//	std::string txt = "ABAABABCABAB";
-//	std::string pat = "CABAB";
-//	//Best = O(1)
-//	//Worst = O(mn)
-//	//Average = O(m/n)
-//	std::cout << searchBC(pat, txt);
-//	//Best = O(1)
-//	//Worst = O(mn)
-//	//Average = O(m/n)
-//	std::cout << searchGS(pat, txt);
-//
-//}
-
 int main(int argc, char* argv[]) {
     if (argc != 4) {
 	std::cout << "Invalid number of arguments" << std::endl;
@@ -171,13 +147,7 @@ int main(int argc, char* argv[]) {
     std::string txt;
     std::ifstream file(filename);
     std::stringstream buffer;
-    // Used to iterate from 0 to Max_Number in order to provide that number as
-    // input to the chosen function. This could possibly be used to provide 
-    // the max character number in the input string, and we can see what 
-    // happens when the substring is located at the beginning, middle, end, 
-    // and nowhere in the text, and we can use this loop to iterate in larger
-    // increments in order to accomplish this.
-    uint16_t max_char = (uint16_t) 99;//atoi(argv[1]);
+    uint16_t max_char;
     
     // Get the text from the text file and hold it in a single string
     buffer << file.rdbuf();
@@ -186,14 +156,20 @@ int main(int argc, char* argv[]) {
 
     // Open the output file
     std::ofstream myfile;
-    myfile.open(std::to_string(max_char)+ "_" + pat+".csv");
+    myfile.open(pat + ".csv");
+
+    // Used to iterate from 0 to max_char (incrementing by 100 each time) in 
+    // order to see how long it takes to perform a search over an 
+    // incrementally larger and larger text string.
+    max_char = (uint16_t) txt.size();
 
     // Execute the selected method and write the time data to the output file
     myfile << "input" << "," << "time" << '\n';
     for (int i = 0; i <= max_char; i += 100) {
 	std::cout << "Searching with method " << method << "..." << std::endl;
-        float time = timer(i, method, &pat, &txt);
-        myfile << i << "," << std::fixed << std::setprecision(4) << time <<'\n';
+	std::string substring = txt.substr(0, i);
+        float time = timer(i, method, &pat, &substring);
+        myfile << i << "," << std::fixed << time <<'\n';
     }
     myfile.close();
 
