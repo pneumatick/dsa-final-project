@@ -107,6 +107,42 @@ bool searchGS(std::string& pat, std::string& text) {
 	return false;
 }
 
+bool boyerMoore(std::string& pat, std::string& text) {
+    int x = pat.size();
+    int y = text.size();
+    std::vector<int>bchar;
+    badChar(pat, x, bchar);
+    std::vector<int> borpo(x + 1);
+    std::vector<int>shift;
+
+    for (int i = 0; i < x + 1; i++) {
+        shift.push_back(0);
+    }
+
+    make_suff(shift, borpo, x, pat);
+    make_pre(shift, borpo, x, pat);
+
+    int i = 0;
+    //creates table of suffixes in pattern
+    while (i <= (y - x)) {
+        int j = x - 1;
+        //if current pattern char matches
+        //current text char -1
+        while (j >= 0 && pat[j] == text[i + j]) {
+            j--;
+        }
+        if (j < 0) {
+            return true;
+        }
+        else {
+            //will move up by corresponding shift value
+            //or 1
+            i += std::max(shift[j + 1], std::max(1, j - bchar[text[i + j]]));
+        }
+    }
+    return false;
+}
+
 // Return the execution time of the selected algorithm
 float timer(uint16_t n, std::string name, std::string* pat, std::string* txt) {
     bool found;
@@ -123,6 +159,11 @@ float timer(uint16_t n, std::string name, std::string* pat, std::string* txt) {
         found = searchGS(*pat, *txt);
         c_end = std::clock();
     }
+    else if (name.compare("bm")) {
+        c_start = std::clock();
+        found = boyerMoore(*pat, *txt);
+        c_end = std::clock();
+    }
     else {
         std::cout << "Invalid function call" << std::endl;
 	return 0.0;
@@ -136,7 +177,11 @@ float timer(uint16_t n, std::string name, std::string* pat, std::string* txt) {
 
 int main(int argc, char* argv[]) {
     if (argc != 4) {
-	std::cout << "Invalid number of arguments" << std::endl;
+	std::cout << "Invalid number of arguments. Three needed:" << std::endl;
+	std::cout << "First: Method (bc, gs, bm)" << std::endl;
+	std::cout << "Second: A pattern to search for" << std::endl;
+	std::cout << "Third: The name of the text file that will be searched"
+		  << std::endl;
         return 0;
     }
 
