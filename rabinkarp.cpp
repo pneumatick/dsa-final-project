@@ -7,6 +7,8 @@
 #include <cstdint>
 #include <sstream>
 #include <iomanip>
+#include <algorithm>
+#include <bits/stdc++.h>
 
 //Pattern being passed is what we are trying to find, text is where we are searching
 void rabinkarp(std::string pat, std::string txt)
@@ -16,7 +18,7 @@ void rabinkarp(std::string pat, std::string txt)
     int patHash = 0; // hash value for pattern
     int textHash = 0; // hash value for txt
     int h = 1;
-    int q = 31; //Prime number used as modulus to prevent collisions in hash values
+    int q = INT_MAX; //Prime number used as modulus to prevent collisions in hash values
 
     // The value of h would be "pow(d, patLen-1)%q"
     for (int i = 0; i < patLen - 1; i++)
@@ -42,6 +44,7 @@ void rabinkarp(std::string pat, std::string txt)
                     break;
                 }
 
+                
             }
 
             if (temp == patLen - 1) {
@@ -50,7 +53,7 @@ void rabinkarp(std::string pat, std::string txt)
 
         }
 
-        if (int i = 0 < textLen - patLen) {
+        if (i < textLen - patLen) {
             textHash = (256 * (textHash - txt[i] * h) + txt[i + patLen]) % q;
 
             if (textHash < 0)
@@ -62,10 +65,18 @@ void rabinkarp(std::string pat, std::string txt)
 int main(int argc, char* argv[])
 {
     // Format: String File Name, Pattern to search for
-    char s[] = "awholeawawbunchawords";
-    char p[] = "aw";
 
+    // std::string str = "awdjuha\nijfiajbfifdbaeifbawawdijbi";
+    // std::string p = "aw";
 
+    // std::cout << str << std::endl;
+    // str.erase(std::remove(str.begin(), str.end(), '\n'), str.cend());
+    // std::cout << str << std::endl;
+
+    // char s[] = "awawawawawawawawawawawawawawawawawawawawawawaw";
+    // char p[] = "aw";
+
+    // rabinkarp(p, s);
 
     std::string input_file_name = argv[1];
     std::ifstream input_file_stream(input_file_name);
@@ -102,4 +113,5 @@ int main(int argc, char* argv[])
         output_file << i << "," << std::fixed << time <<'\n';
     }
     output_file.close();
+
 }
