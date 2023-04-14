@@ -65,19 +65,6 @@ void rabinkarp(std::string pat, std::string txt)
 int main(int argc, char* argv[])
 {
     // Format: String File Name, Pattern to search for
-
-    // std::string str = "awdjuha\nijfiajbfifdbaeifbawawdijbi";
-    // std::string p = "aw";
-
-    // std::cout << str << std::endl;
-    // str.erase(std::remove(str.begin(), str.end(), '\n'), str.cend());
-    // std::cout << str << std::endl;
-
-    // char s[] = "awawawawawawawawawawawawawawawawawawawawawawaw";
-    // char p[] = "aw";
-
-    // rabinkarp(p, s);
-
     std::string input_file_name = argv[1];
     std::ifstream input_file_stream(input_file_name);
     std::string input_string;
