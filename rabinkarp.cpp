@@ -2,12 +2,17 @@
 #include <string>
 #include <cmath>
 #include <cstring>
+#include <fstream>
+#include <ctime>
+#include <cstdint>
+#include <sstream>
+#include <iomanip>
 
 //Pattern being passed is what we are trying to find, text is where we are searching
-void rabinkarp(char pat[], char txt[])
+void rabinkarp(std::string pat, std::string txt)
 {
-    int patLen = strlen(pat);
-    int textLen = strlen(txt);
+    int patLen = pat.length();
+    int textLen = txt.length();
     int patHash = 0; // hash value for pattern
     int textHash = 0; // hash value for txt
     int h = 1;
@@ -54,10 +59,47 @@ void rabinkarp(char pat[], char txt[])
     }
 }
 
-int main()
+int main(int argc, char* argv[])
 {
-    char s[] = "awholebunchawords";
+    // Format: String File Name, Pattern to search for
+    char s[] = "awholeawawbunchawords";
     char p[] = "aw";
 
-    rabinkarp(p, s);
+
+
+    std::string input_file_name = argv[1];
+    std::ifstream input_file_stream(input_file_name);
+    std::string input_string;
+
+    // Buffer to hold file contents as a string
+    std::stringstream buffer;
+    buffer << input_file_stream.rdbuf();
+    input_string = buffer.str();
+    input_file_stream.close();
+
+    std::string pattern = argv[2];
+
+    // Open the output file
+    std::ofstream output_file;
+    output_file.open(pattern + ".csv");
+
+    // Used to iterate from 0 to max_char (incrementing by 100 each time) in 
+    // order to see how long it takes to perform a search over an 
+    // incrementally larger and larger text string.
+    uint16_t max_char;
+    max_char = (uint16_t) input_string.size();
+
+
+    // Populates output file with runtime data
+    unsigned long c_start, c_end;
+    output_file << "input" << "," << "time" << '\n';
+    for (int i = 0; i <= max_char; i += 100) {
+	    std::string substring = input_string.substr(0, i);
+        c_start = std::clock();
+        rabinkarp(pattern, substring);
+        c_end = std::clock();
+        float time = 1.0 * (c_end - c_start) / CLOCKS_PER_SEC;
+        output_file << i << "," << std::fixed << time <<'\n';
+    }
+    output_file.close();
 }
