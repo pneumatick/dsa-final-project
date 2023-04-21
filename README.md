@@ -2,12 +2,19 @@
 
 ### Compilation Instructions for Rabin-Karp Algorithm
 
-When compiling the program for the Rabin-Karp search algorithm the user
+To compile the program that contains the Rabin-Karp algorithm, execute the line below in
+the directory of the program's location.
+
+    g++ -Wall rabinkarp.cpp -o rabinkarp
+
+### Running the Rabin-Karp Algorithm
+
+When running the program for the Rabin-Karp search algorithm the user
 must provide a text file with the text they wish to search through, as well
-as the specific pattern they are searching for (formatted like this <file_name pattern> ).
+as the specific pattern they are searching for (this is formatted as follows  < file_name pattern > ).
 These are passed into the program as command line arguments. Below is what this should look like.
 
-    C:\Users\Jason\Documents\GitHub\dsa-final-project\cmake-build-debug\rabinkarp.exe text.txt Vivamus
+    ./rabinkarp text.txt "Vivamus"
 
 In this example, our Lorem Ipsum text file, text.txt, is filled with latin placeholder
 text. Within this text we are searching for the word "Vivamus". This is the format that
@@ -22,7 +29,7 @@ To compile the program containing the Boyer-Moore algorithm, execute the followi
 
 ### Running the Boyer-Moore Algorithm
 
-When running the program for the Boyer-Moore search algorithm, it follows a similar format as the Rabin-Karp implementation. The main difference is that there is an additional command line argument that is needed for this code to compile correctly. Instead of using the <file_name pattern> format, the Boyer-Moore implementation requires <method pattern file_name> where the method is `bm` (which stands for "Boyer-Moore"). An example of this as a command line argument looks like this:
+When running the program for the Boyer-Moore search algorithm, it follows a similar format as the Rabin-Karp implementation. The main difference is that there is an additional command line argument that is needed for this code to compile correctly. Instead of using the < file_name pattern > format, the Boyer-Moore implementation requires < method pattern file_name > where the method is `bm` (which stands for "Boyer-Moore"). An example of this as a command line argument looks like this:
 
     ./boyermoore bm "Lorem" txt/text.txt
 
