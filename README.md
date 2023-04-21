@@ -16,14 +16,16 @@ also placed within the current working directory.
 
 ### Compilation Instructions for Boyer-Moore Algorithm
 
-When compiling the program for the Boyer-Moore search algorithm, it follows a similar format 
-as the Rabin-Karp implementation. The main difference is that there is an additional command line
-argument that is needed for this code to compile correctly. Instead of using the <file_name pattern>
-format, the Boyer-Moore implementation requires <file_name method pattern> where method is either
-bc (bad character), gs (good suffix), or bm (Boyer-Moore) depending on which method the user wishes
-to used for searching. An example of this as a command line argument looks like this:
+To compile the program containing the Boyer-Moore algorithm, execute the following line in the directory containing boyermoore.cpp:
 
-    C:\Users\Jason\Documents\GitHub\dsa-final-project\cmake-build-debug\rabinkarp.exe text.txt gs ut
+    g++ -Wall boyermoore.cpp -o boyermoore
 
-In this example, we are again searching through the text.txt file searching for the pattern "ut" and the gs in
-between indicates that the program will use the good suffix heuristic.
+### Running the Boyer-Moore Algorithm
+
+When running the program for the Boyer-Moore search algorithm, it follows a similar format as the Rabin-Karp implementation. The main difference is that there is an additional command line argument that is needed for this code to compile correctly. Instead of using the <file_name pattern> format, the Boyer-Moore implementation requires <method pattern file_name> where the method is `bm` (which stands for "Boyer-Moore"). An example of this as a command line argument looks like this:
+
+    ./boyermoore bm "Lorem" txt/text.txt
+
+In this example, we are again searching through the text.txt file searching for the pattern "Lorem" and the bm in between indicates that the program will use the Boyer-Moore algorithm. The user can also enter `bc` for "Bad Character" and `gs` for "Good Suffix" as the method argument to use search algorithms based only on those rules.
+
+**NOTE:** There is a chance that the program, when compiled on a machine running Windows, will fail to find the file in the "txt" directory due to file path format differences. If this is an issue, copy the text file into the same directory that the program is in and enter the name of the file as the argument.
