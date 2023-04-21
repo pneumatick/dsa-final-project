@@ -1,4 +1,4 @@
-# dsa-final-project
+# DSA Final Project: String Search I
 
 ### Compilation Instructions for Rabin-Karp Algorithm
 
